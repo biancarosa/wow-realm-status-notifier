@@ -12,7 +12,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.RUN_PROJECT }}
   RUN_REGION: us-central1
-  SERVICE_NAME: wow-real-status-notifier
+  SERVICE_NAME: wow-realm-status-notifier
 
 jobs:
   setup-build-deploy:

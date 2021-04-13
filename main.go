@@ -30,21 +30,11 @@ func Handler(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// Check if the message contains the word "marco"
-	// if not, return without doing anything
-	if !strings.Contains(strings.ToLower(body.Message.Text), "marco") {
-		return
+	switch {
+	case strings.HasPrefix(body.Message.Text, "/notify-status"): notifyStatus(body)
+	case strings.HasPrefix(body.Message.Text, "/stop-notifying"): stopNotifying(body)
+	default: return
 	}
-
-	// If the text contains marco, call the `sayPolo` function, which
-	// is defined below
-	if err := sayPolo(body.Message.Chat.ID); err != nil {
-		fmt.Println("error in sending reply:", err)
-		return
-	}
-
-	// log a confirmation message if the message is sent successfully
-	fmt.Println("reply sent")
 }
 
 //The below code deals with the process of sending a response message
@@ -58,12 +48,20 @@ type sendMessageReqBody struct {
 	Text   string `json:"text"`
 }
 
-// sayPolo takes a chatID and sends "polo" to them
-func sayPolo(chatID int64) error {
+func notifyStatus(body *webhookReqBody) error {
+	return sendMessage(body.Message.Chat.ID, "Registered! Will notify you when server is up or down!")
+}
+
+func stopNotifying(body *webhookReqBody) error {
+	return sendMessage(body.Message.Chat.ID, "I will stop notifying you when server is up or down!")
+}
+
+// sendMessage takes a chatID and sends a message to them
+func sendMessage(chatID int64, message string) error {
 	// Create the request body struct
 	reqBody := &sendMessageReqBody{
 		ChatID: chatID,
-		Text:   "Polo!!",
+		Text:   message,
 	}
 	// Create the JSON body from the struct
 	reqBytes, err := json.Marshal(reqBody)

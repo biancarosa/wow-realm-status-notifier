@@ -1,7 +1,4 @@
 name: build-api
-defaults:
-  run:
-    working-directory: api
     
 on:
   push:

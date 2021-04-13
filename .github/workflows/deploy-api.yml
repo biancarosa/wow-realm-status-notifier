@@ -1,8 +1,5 @@
 # Based on: https://github.com/GoogleCloudPlatform/github-actions/blob/master/example-workflows/cloud-run/.github/workflows/cloud-run.yml
 name: deploy-api
-defaults:
-  run:
-    working-directory: api
 
 on:
   push:

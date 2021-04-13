@@ -49,10 +49,12 @@ type sendMessageReqBody struct {
 }
 
 func notifyStatus(body *webhookReqBody) error {
+	fmt.Println("Notify status")
 	return sendMessage(body.Message.Chat.ID, "Registered! Will notify you when server is up or down!")
 }
 
 func stopNotifying(body *webhookReqBody) error {
+	fmt.Println("Stop notifying")
 	return sendMessage(body.Message.Chat.ID, "I will stop notifying you when server is up or down!")
 }
 

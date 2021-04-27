@@ -7,8 +7,11 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"os"
+	
+	"github.com/biancarosa/wow-realm-status-notifier/configuration"
 )
+
+var config *configuration.Config
 
 // Create a struct that mimics the webhook response body
 // https://core.telegram.org/bots/api#update
@@ -72,8 +75,7 @@ func sendMessage(chatID int64, message string) error {
 	}
 
 	// Send a post request with your token
-	token := os.Getenv("TELEGRAM_TOKEN")
-	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", token)
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", config.TelegramToken)
 	res, err := http.Post(url, "application/json", bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return err
@@ -87,10 +89,7 @@ func sendMessage(chatID int64, message string) error {
 
 // FInally, the main funtion starts our server on port 3000
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3000"
-	}
-	fmt.Println("Running server on port", port)
-	http.ListenAndServe(fmt.Sprintf(":%s", port), http.HandlerFunc(Handler))
+	config = configuration.GetConfig()
+	fmt.Println("Running server on port", config.Port)
+	http.ListenAndServe(fmt.Sprintf(":%s", config.Port), http.HandlerFunc(Handler))
 }

@@ -1,6 +1,7 @@
 package configuration
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -36,4 +37,15 @@ func TestValidateWhenTelegramTokenIsNotSet(t *testing.T) {
 	c.TelegramToken = ""
 
 	assert.Panics(t, c.Validate, "The code did not panic when telegram token was not set")
+}
+
+func TestGetConfig(t *testing.T) {
+	fakeConfig := generateFakeConfig()
+
+	os.Setenv("TELEGRAM_TOKEN", fakeConfig.TelegramToken)
+	os.Setenv("PORT", fakeConfig.Port)
+	c := GetConfig()
+
+	assert.Equal(t, c.TelegramToken, fakeConfig.TelegramToken)
+	assert.Equal(t, c.Port, fakeConfig.Port)
 }

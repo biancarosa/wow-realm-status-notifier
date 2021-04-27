@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	
+
 	"github.com/biancarosa/wow-realm-status-notifier/configuration"
 )
 
@@ -34,9 +34,12 @@ func Handler(res http.ResponseWriter, req *http.Request) {
 	}
 
 	switch {
-	case strings.HasPrefix(body.Message.Text, "/notify-status"): notifyStatus(body)
-	case strings.HasPrefix(body.Message.Text, "/stop-notifying"): stopNotifying(body)
-	default: return
+	case strings.HasPrefix(body.Message.Text, "/notify-status"):
+		notifyStatus(body)
+	case strings.HasPrefix(body.Message.Text, "/stop-notifying"):
+		stopNotifying(body)
+	default:
+		return
 	}
 }
 
@@ -87,7 +90,6 @@ func sendMessage(chatID int64, message string) error {
 	return nil
 }
 
-// FInally, the main funtion starts our server on port 3000
 func main() {
 	config = configuration.GetConfig()
 	fmt.Println("Running server on port", config.Port)

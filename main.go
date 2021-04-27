@@ -87,6 +87,10 @@ func sendMessage(chatID int64, message string) error {
 
 // FInally, the main funtion starts our server on port 3000
 func main() {
-	fmt.Println("Running server")
-	http.ListenAndServe(":3000", http.HandlerFunc(Handler))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+	fmt.Println("Running server on port", port)
+	http.ListenAndServe(fmt.Sprintf(":%s", port), http.HandlerFunc(Handler))
 }

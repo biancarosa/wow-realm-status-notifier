@@ -1,22 +1,37 @@
 package configuration
 
+import (
+	"errors"
+)
+
 type Config struct {
-	TelegramToken string
-	Port          string
+	TelegramToken   string
+	Port            string
+	GoogleProjectID string
 }
 
-func (c *Config) Validate() {
+func (c *Config) Validate() error {
 	if c.Port == "" {
 		c.Port = "3000"
 	}
 	if c.TelegramToken == "" {
-		panic("Telegram Token must be provided")
+		return errors.New("telegram token must be provided")
 	}
+	return nil
 }
 
 func GetConfig() *Config {
-	provider := new(EnvironmentVariablesConfigurationProvider)
-	c := provider.GetConfig()
-	c.Validate()
+	c := new(Config)
+	ep := new(EnvironmentVariablesConfigurationProvider)
+	c = ep.PopulateConfig(c)
+	if err := c.Validate(); err == nil {
+		return c
+	}
+
+	gsmp := new(GoogleSecretManagerConfigurationProvider)
+	c = gsmp.PopulateConfig(c)
+	if err := c.Validate(); err != nil {
+		panic(err)
+	}
 	return c
 }

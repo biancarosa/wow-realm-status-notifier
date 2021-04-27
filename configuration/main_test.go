@@ -12,6 +12,7 @@ func generateFakeConfig() *Config {
 	fakeConfig := new(Config)
 	fakeConfig.TelegramToken = faker.Lorem().String()
 	fakeConfig.Port = faker.Number().Number(5)
+	fakeConfig.GoogleProjectID = faker.Lorem().String()
 	return fakeConfig
 }
 
@@ -36,7 +37,8 @@ func TestValidateWhenTelegramTokenIsNotSet(t *testing.T) {
 	c := generateFakeConfig()
 	c.TelegramToken = ""
 
-	assert.Panics(t, c.Validate, "The code did not panic when telegram token was not set")
+	err := c.Validate()
+	assert.NotNil(t, err)
 }
 
 func TestGetConfig(t *testing.T) {

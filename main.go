@@ -32,7 +32,7 @@ func Handler(res http.ResponseWriter, req *http.Request) {
 		fmt.Println("could not decode request body", err)
 		return
 	}
-
+	fmt.Println("received message", body.Message.Text)
 	switch {
 	case strings.HasPrefix(body.Message.Text, "/notify-status"):
 		notifyStatus(body)

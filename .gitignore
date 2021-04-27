@@ -1,2 +1,10 @@
+
+# Configuration files
 .env
+
+# Possible binaries
 app-bin
+wow-realm-status-notifier
+
+# Testing utilities
+coverage.out

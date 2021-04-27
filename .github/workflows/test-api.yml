@@ -13,7 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Test Code
-        run: go test ./..
+        run: go test -race -covermode=atomic -coverprofile=coverage.out
 
+      - name: "Upload coverage to Codecov"
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+        
       - name: Docker build
         run: docker build . -t wow-realm-status-notifier

@@ -12,5 +12,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Test Code
+        run: go test ./..
+
       - name: Docker build
         run: docker build . -t wow-realm-status-notifier

@@ -3,10 +3,10 @@ package configuration
 import "os"
 
 type ConfigurationProvider interface {
-    GetConfig() *Config
+	GetConfig() *Config
 }
 
-type EnvironmentVariablesConfigurationProvider struct {}
+type EnvironmentVariablesConfigurationProvider struct{}
 
 func (p *EnvironmentVariablesConfigurationProvider) GetConfig() *Config {
 	c := new(Config)

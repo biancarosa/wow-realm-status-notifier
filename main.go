@@ -79,11 +79,14 @@ func sendMessage(chatID int64, message string) error {
 
 	// Send a post request with your token
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", config.TelegramToken)
+	fmt.Println("Sending message to telegram chat id", chatID)
 	res, err := http.Post(url, "application/json", bytes.NewBuffer(reqBytes))
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 	if res.StatusCode != http.StatusOK {
+		fmt.Println(res.StatusCode)
 		return errors.New("unexpected status" + res.Status)
 	}
 

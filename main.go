@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -80,6 +81,7 @@ func sendMessage(chatID int64, message string) error {
 	// Send a post request with your token
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", config.TelegramToken)
 	fmt.Println("Sending message to telegram chat id", chatID)
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	res, err := http.Post(url, "application/json", bytes.NewBuffer(reqBytes))
 	if err != nil {
 		fmt.Println(err)

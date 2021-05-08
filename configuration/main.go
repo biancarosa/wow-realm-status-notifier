@@ -4,6 +4,8 @@ import (
 	"errors"
 )
 
+var c *Config
+
 type Config struct {
 	TelegramToken   string
 	Port            string
@@ -21,7 +23,10 @@ func (c *Config) Validate() error {
 }
 
 func GetConfig() *Config {
-	c := new(Config)
+	if c != nil {
+		return c
+	}
+	c = new(Config)
 	ep := new(EnvironmentVariablesConfigurationProvider)
 	c = ep.PopulateConfig(c)
 	if err := c.Validate(); err == nil {

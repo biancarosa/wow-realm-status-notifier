@@ -1,0 +1,29 @@
+version: "3.0"
+services:
+  redis:
+    image: "redis:alpine"
+    networks:
+      - data_sharing
+  db:
+    image: mongo:3.7.9
+    networks:
+      - data_sharing
+  wow-realm-status-notifier:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - 3000:3000
+      depends_on: 
+        - redis
+        - db
+      environment:
+      - MONGODB_HOST=db
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=notification_requests
+      - MONGODB_COLLECTION=servers
+      env_file:
+        - .env
+networks:
+  data_sharing:
+    driver: bridge

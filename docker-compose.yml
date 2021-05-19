@@ -19,9 +19,6 @@ services:
         - db
       environment:
       - MONGODB_HOST=db
-      - MONGODB_PORT=27017
-      - MONGODB_DATABASE=notification_requests
-      - MONGODB_COLLECTION=servers
       env_file:
         - .env
 networks:

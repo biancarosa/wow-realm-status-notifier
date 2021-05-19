@@ -20,6 +20,10 @@ func (p *EnvironmentVariablesConfigurationProvider) PopulateConfig(c *Config) *C
 	c.TelegramToken = os.Getenv("TELEGRAM_TOKEN")
 	c.Port = os.Getenv("PORT")
 	c.GoogleProjectID = os.Getenv("GOOGLE_PROJECT_ID")
+	c.MongoDB.Host = os.Getenv("MONGODB_HOST")
+	c.MongoDB.Port = os.Getenv("MONGODB_PORT")
+	c.MongoDB.Database = os.Getenv("MONGODB_DATABASE")
+	c.MongoDB.Collection = os.Getenv("MONGODB_COLLECTION")
 	return c
 }
 

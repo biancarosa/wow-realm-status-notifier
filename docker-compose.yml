@@ -5,7 +5,7 @@ services:
     networks:
       - data_sharing
   db:
-    image: mongo:3.7.9
+    image: mongo:4.4.6
     networks:
       - data_sharing
   wow-realm-status-notifier:

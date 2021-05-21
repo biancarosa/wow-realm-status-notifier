@@ -2,6 +2,6 @@ package models
 
 type NotificationsRequest struct {
 	Server   string
-	User     string
+	ChatID   int64
 	DateTime string
 }

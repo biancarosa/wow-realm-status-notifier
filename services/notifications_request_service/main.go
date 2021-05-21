@@ -4,7 +4,7 @@ import (
 	"github.com/biancarosa/wow-realm-status-notifier/models"
 )
 
-type notificationReqServiceInterface interface {
+type NotificationReqServiceInterface interface {
 	Create(*models.NotificationsRequest) error
 }
 

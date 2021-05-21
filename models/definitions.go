@@ -1,7 +1,11 @@
 package models
 
+import (
+	"gorm.io/gorm"
+)
+
 type NotificationsRequest struct {
-	Server   string
-	ChatID   int64
-	DateTime string
+	gorm.Model
+	Server string
+	ChatID uint8
 }

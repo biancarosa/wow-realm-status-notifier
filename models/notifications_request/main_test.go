@@ -8,7 +8,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	chatID := int64(faker.RandomInt(1, 1000))
+	chatID := uint8(faker.RandomInt(1, 1000))
 	server := faker.Lorem().String()
 	nr := New(chatID, server)
 	assert.NotNil(t, nr)

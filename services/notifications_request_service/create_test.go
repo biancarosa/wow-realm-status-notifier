@@ -10,12 +10,12 @@ import (
 
 func TestCreate(t *testing.T) {
 	s := New()
-	chatID := int64(faker.RandomInt(1, 1000))
+	chatID := uint8(faker.RandomInt(1, 1000))
 	server := faker.Lorem().String()
-	nr := &models.NotificationsRequest{
+	nr := models.NotificationsRequest{
 		ChatID: chatID,
 		Server: server,
 	}
-	err := s.Create(nr)
-	assert.Nil(t, err)
+	err := s.Create(&nr)
+	assert.NotNil(t, err)
 }

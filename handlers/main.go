@@ -20,7 +20,7 @@ type webhookReqBody struct {
 	Message struct {
 		Text string `json:"text"`
 		Chat struct {
-			ID int64 `json:"id"`
+			ID uint8 `json:"id"`
 		} `json:"chat"`
 	} `json:"message"`
 }
@@ -51,12 +51,12 @@ func MainHandler(res http.ResponseWriter, req *http.Request) {
 // of the send message request
 // https://core.telegram.org/bots/api#sendmessage
 type sendMessageReqBody struct {
-	ChatID int64  `json:"chat_id"`
+	ChatID uint8  `json:"chat_id"`
 	Text   string `json:"text"`
 }
 
 // sendMessage takes a chatID and sends a message to them
-func sendMessage(chatID int64, message string) error {
+func sendMessage(chatID uint8, message string) error {
 	config = configuration.GetConfig()
 
 	// Create the request body struct

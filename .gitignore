@@ -8,3 +8,6 @@ wow-realm-status-notifier
 
 # Testing utilities
 coverage.out
+
+# sqllite
+*.db

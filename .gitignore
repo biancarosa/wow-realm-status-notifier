@@ -11,3 +11,6 @@ coverage.out
 
 # sqllite
 *.db
+
+# python venv
+venv

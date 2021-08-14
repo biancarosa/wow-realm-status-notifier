@@ -30,19 +30,8 @@ type Handler struct {
 	Services *services.AppServices
 }
 
-func (h *Handler) DependenciesMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		h.Services = services.GetServices(r.Context())
-		next(w, r)
-	}
-}
-
-func New() *Handler {
-	return new(Handler)
-}
-
 // This handler is called everytime telegram sends us a webhook event
-func (h *Handler) MainHandler(w http.ResponseWriter, req *http.Request) {
+func MainHandler(w http.ResponseWriter, req *http.Request) {
 	// First, decode the JSON response body
 	body := &webhookReqBody{}
 	if err := json.NewDecoder(req.Body).Decode(body); err != nil {
@@ -50,6 +39,11 @@ func (h *Handler) MainHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	fmt.Println("received message", body.Message.Text)
+
+	services := services.GetServices(req.Context())
+	h := &Handler{
+		Services: services,
+	}
 	switch {
 	case strings.HasPrefix(body.Message.Text, "/notify-status"):
 		h.NotifyStatusHandler(body)

@@ -20,8 +20,7 @@ func main() {
 	database.Init("local.db")
 
 	fmt.Println("Running server on port", config.Port)
-	h := handlers.New()
-	http.HandleFunc("/", h.DependenciesMiddleware(h.MainHandler))
+	http.HandleFunc("/", handlers.MainHandler)
 	err := server.ListenAndServe()
 	if err != nil {
 		fmt.Println(err)

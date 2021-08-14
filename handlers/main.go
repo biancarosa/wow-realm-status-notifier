@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/biancarosa/wow-realm-status-notifier/configuration"
 	"github.com/biancarosa/wow-realm-status-notifier/services"
@@ -27,18 +28,36 @@ type webhookReqBody struct {
 }
 
 type Handler struct {
-	Services *services.AppServices
+	Services  *services.AppServices
+	RequestID string
 }
 
 func (h *Handler) DependenciesMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		h.Services = services.GetServices(r.Context())
+		h.RequestID = r.Header.Get("X-Request-ID")
 		next(w, r)
 	}
 }
 
 func New() *Handler {
 	return new(Handler)
+}
+
+func (h *Handler) RequestIDHandler(w http.ResponseWriter, req *http.Request) {
+	obj := struct {
+		RequestID string
+	}{
+		RequestID: h.RequestID,
+	}
+	fmt.Println(obj.RequestID)
+	time.Sleep(time.Second * 10)
+	go func(r string) {
+		fmt.Printf("Do stuff with %s", r)
+	}(obj.RequestID)
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(obj)
 }
 
 // This handler is called everytime telegram sends us a webhook event

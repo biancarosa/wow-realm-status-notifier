@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/biancarosa/wow-realm-status-notifier/configuration"
+	"github.com/biancarosa/wow-realm-status-notifier/services"
 )
 
 var config *configuration.Config
@@ -25,8 +26,23 @@ type webhookReqBody struct {
 	} `json:"message"`
 }
 
+type Handler struct {
+	Services *services.AppServices
+}
+
+func (h *Handler) DependenciesMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		h.Services = services.GetServices(r.Context())
+		next(w, r)
+	}
+}
+
+func New() *Handler {
+	return new(Handler)
+}
+
 // This handler is called everytime telegram sends us a webhook event
-func MainHandler(res http.ResponseWriter, req *http.Request) {
+func (h *Handler) MainHandler(w http.ResponseWriter, req *http.Request) {
 	// First, decode the JSON response body
 	body := &webhookReqBody{}
 	if err := json.NewDecoder(req.Body).Decode(body); err != nil {
@@ -36,9 +52,9 @@ func MainHandler(res http.ResponseWriter, req *http.Request) {
 	fmt.Println("received message", body.Message.Text)
 	switch {
 	case strings.HasPrefix(body.Message.Text, "/notify-status"):
-		NotifyStatusHandler(body)
+		h.NotifyStatusHandler(body)
 	case strings.HasPrefix(body.Message.Text, "/stop-notifying"):
-		StopNotifyingHandler(body)
+		h.StopNotifyingHandler(body)
 	default:
 		return
 	}

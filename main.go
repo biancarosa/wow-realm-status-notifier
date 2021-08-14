@@ -13,9 +13,18 @@ var config *configuration.Config
 
 func main() {
 	config = configuration.GetConfig()
+	server := http.Server{
+		Addr: fmt.Sprintf(":%s", config.Port),
+	}
 
 	database.Init("local.db")
 
 	fmt.Println("Running server on port", config.Port)
-	http.ListenAndServe(fmt.Sprintf(":%s", config.Port), http.HandlerFunc(handlers.MainHandler))
+	h := handlers.New()
+	http.HandleFunc("/", h.DependenciesMiddleware(h.MainHandler))
+	err := server.ListenAndServe()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("Shut down")
 }

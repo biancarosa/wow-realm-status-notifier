@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/biancarosa/wow-realm-status-notifier/models/notifications_request"
-	"github.com/biancarosa/wow-realm-status-notifier/services"
 )
 
 func getServerFromText(text string) (string, error) {
@@ -18,9 +17,8 @@ func getServerFromText(text string) (string, error) {
 	return spplited[1], nil
 }
 
-func NotifyStatusHandler(body *webhookReqBody) error {
+func (h *Handler) NotifyStatusHandler(body *webhookReqBody) error {
 	fmt.Println("Notify status")
-	serviceContainer := services.GetServices()
 	fmt.Printf("%#v\n", body)
 	server, err := getServerFromText(body.Message.Text)
 	if err != nil {
@@ -28,7 +26,7 @@ func NotifyStatusHandler(body *webhookReqBody) error {
 	}
 	nr := notifications_request.New(body.Message.Chat.ID, server)
 	// TODO: Add logging lib and log and handle this error properly
-	err = serviceContainer.NotificationsRequestService.Create(nr)
+	err = h.Services.NotificationsRequestService.Create(nr)
 	if err != nil {
 		return sendMessage(body.Message.Chat.ID, "Something weird happenned in my circuits. Try again later, pretty please?")
 	} else {

@@ -1,6 +1,7 @@
 package notifications_request_service
 
 import (
+	"context"
 	"testing"
 
 	"github.com/biancarosa/wow-realm-status-notifier/models"
@@ -9,7 +10,7 @@ import (
 )
 
 func TestCreate(t *testing.T) {
-	s := New()
+	s := New(context.Background())
 	chatID := uint8(faker.RandomInt(1, 1000))
 	server := faker.Lorem().String()
 	nr := models.NotificationsRequest{

@@ -9,15 +9,13 @@ import (
 	"github.com/biancarosa/wow-realm-status-notifier/handlers"
 )
 
-var config *configuration.Config
-
 func main() {
-	config = configuration.GetConfig()
+	config := configuration.GetConfig()
 	server := http.Server{
 		Addr: fmt.Sprintf(":%s", config.Port),
 	}
 
-	database.Init("local.db")
+	database.Init()
 
 	fmt.Println("Running server on port", config.Port)
 	http.HandleFunc("/", handlers.MainHandler)
@@ -25,5 +23,5 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println("Shut down")
+	fmt.Println("Shutdown")
 }

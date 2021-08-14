@@ -6,6 +6,5 @@ func New(chatID uint8, server string) *models.NotificationsRequest {
 	n := new(models.NotificationsRequest)
 	n.ChatID = chatID
 	n.Server = server
-	// TODO: Add current datetime
 	return n
 }

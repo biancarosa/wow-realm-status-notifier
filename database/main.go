@@ -7,12 +7,14 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
 func Init(dbName string) {
-	db, err := gorm.Open(sqlite.Open(dbName), &gorm.Config{})
+	DB, err := gorm.Open(sqlite.Open(dbName), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 
 	// Migrate the schema
-	db.AutoMigrate(&models.NotificationsRequest{})
+	DB.AutoMigrate(&models.NotificationsRequest{})
 }
